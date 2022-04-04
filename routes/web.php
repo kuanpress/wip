@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DrawController;
 use App\Http\Controllers\UpController;
 use Illuminate\Support\Facades\Route;
 // use Image;
@@ -22,4 +23,4 @@ Route::get('/', function () {
 Route::get('/img', [UpController::class, 'index'])->name('img');
 Route::post('/img', [UpController::class, 'calc'])->name('img_calc');
 
-Route::get('/draw', [UpController::class, 'draw'])->name('draw');
+Route::get('/draw', [DrawController::class, 'draw'])->name('draw');

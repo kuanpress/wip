@@ -8,6 +8,17 @@ use Image;
 
 class UpController extends Controller
 {
+
+    private $zeroCut;
+    private $twoCut;
+    private $threeCut;
+    private $fourCut;
+    private $twoHCut;
+    private $fourVCut;
+    private $sixCut;
+    private $eightCut;
+    private $nineCut;
+
     public function index()
     {
         return view('front.index');
@@ -41,29 +52,51 @@ class UpController extends Controller
 
         switch ($paper_size) {
             case 1:
-                $twoCut = $this->doCalc(2, $available_paper_sizes, $width, $height, $paper_size);
-                $threeCut = $this->doCalc(3, $available_paper_sizes, $width, $height, $paper_size);
-                $fourCut = $this->doCalc(4, $available_paper_sizes, $width, $height, $paper_size);
-
-                array_push($tmp, ['twoCut' => number_format(max($twoCut), 0)], ['threeCut' => number_format(max($threeCut), 0)], ['fourCut' => number_format(max($fourCut), 0)]);
+                $this->doPaperSize($available_paper_sizes, $width, $height, $paper_size);
+                array_push(
+                    $tmp,
+                    ['zeroCut' => number_format(max($this->zeroCut), 0)],
+                    ['twoCut' => number_format(max($this->twoCut), 0)],
+                    ['threeCut' => number_format(max($this->threeCut), 0)],
+                    ['fourCut' => number_format(max($this->fourCut), 0)],
+                    ['twoHCut' => number_format(max($this->twoHCut), 0)],
+                    ['fourVCut' => number_format(max($this->fourVCut), 0)],
+                    ['sixCut' => number_format(max($this->sixCut), 0)],
+                    ['eightCut' => number_format(max($this->eightCut), 0)],
+                    ['nineCut' => number_format(max($this->nineCut), 0)]
+                );
                 break;
             case 2:
-                $twoCut = $this->doCalc(2, $available_paper_sizes, $width, $height, $paper_size);
-                $threeCut = $this->doCalc(3, $available_paper_sizes, $width, $height, $paper_size);
-                $fourCut = $this->doCalc(4, $available_paper_sizes, $width, $height, $paper_size);
-
-                array_push($tmp, ['twoCut' => number_format(max($twoCut), 0)], ['threeCut' => number_format(max($threeCut), 0)], ['fourCut' => number_format(max($fourCut), 0)]);
+                $this->doPaperSize($available_paper_sizes, $width, $height, $paper_size);
+                array_push(
+                    $tmp,
+                    ['zeroCut' => number_format(max($this->zeroCut), 0)],
+                    ['twoCut' => number_format(max($this->twoCut), 0)],
+                    ['threeCut' => number_format(max($this->threeCut), 0)],
+                    ['fourCut' => number_format(max($this->fourCut), 0)],
+                    ['twoHCut' => number_format(max($this->twoHCut), 0)],
+                    ['fourVCut' => number_format(max($this->fourVCut), 0)],
+                    ['sixCut' => number_format(max($this->sixCut), 0)],
+                    ['eightCut' => number_format(max($this->eightCut), 0)],
+                    ['nineCut' => number_format(max($this->nineCut), 0)]
+                );
                 break;
             case 3:
-                $twoCut = $this->doCalc(2, $available_paper_sizes, $width, $height, $paper_size);
-                $threeCut = $this->doCalc(3, $available_paper_sizes, $width, $height, $paper_size);
-                $fourCut = $this->doCalc(4, $available_paper_sizes, $width, $height, $paper_size);
-
-                array_push($tmp, ['twoCut' => number_format(max($twoCut), 0)], ['threeCut' => number_format(max($threeCut), 0)], ['fourCut' => number_format(max($fourCut), 0)]);
+                $this->doPaperSize($available_paper_sizes, $width, $height, $paper_size);
+                array_push(
+                    $tmp,
+                    ['zeroCut' => number_format(max($this->zeroCut), 0)],
+                    ['twoCut' => number_format(max($this->twoCut), 0)],
+                    ['threeCut' => number_format(max($this->threeCut), 0)],
+                    ['fourCut' => number_format(max($this->fourCut), 0)],
+                    ['twoHCut' => number_format(max($this->twoHCut), 0)],
+                    ['fourVCut' => number_format(max($this->fourVCut), 0)],
+                    ['sixCut' => number_format(max($this->sixCut), 0)],
+                    ['eightCut' => number_format(max($this->eightCut), 0)],
+                    ['nineCut' => number_format(max($this->nineCut), 0)]
+                );
                 break;
         }
-
-        // return $tmp;
 
         return view('front.index')->with('tmp', $tmp);
     }
@@ -72,11 +105,24 @@ class UpController extends Controller
     {
         $tmp = [];
 
+        $r1 = 0;
+        $r2 = 0;
+
         switch ($paper_size) {
             case 1:
+                if ($howManyCut == 0) {
+                    $r1 = floor($available_paper_sizes->a->width / $width) * floor($available_paper_sizes->a->height / $height);
+                    $r2 = floor($available_paper_sizes->a->width / $height) * floor($available_paper_sizes->a->height / $width);
+                }
+
                 if ($howManyCut == 2) {
                     $r1 = floor((floor(($available_paper_sizes->a->width / 2)) / $width)) * ($available_paper_sizes->a->height / $height);
                     $r2 = ($available_paper_sizes->a->width / $height) * floor((floor(($available_paper_sizes->a->height / 2)) / $width));
+                }
+
+                if ($howManyCut == '2H') {
+                    $r1 = floor((floor(($available_paper_sizes->a->height / 2)) / $height)) * ($available_paper_sizes->a->width / $width);
+                    $r2 = ($available_paper_sizes->a->height / $height) * floor((floor(($available_paper_sizes->a->width / 2)) / $width));
                 }
 
                 if ($howManyCut == 3) {
@@ -88,12 +134,42 @@ class UpController extends Controller
                     $r1 = floor((floor(($available_paper_sizes->a->width / 2)) / $width)) * floor(floor(($available_paper_sizes->a->height / 2)) / $height);
                     $r2 = floor((floor(($available_paper_sizes->a->width / 2)) / $height)) * floor(floor(($available_paper_sizes->a->height / 2)) / $width);
                 }
+
+                if ($howManyCut == '4V') {
+                    $r1 = floor((floor(($available_paper_sizes->c->width / 4)) / $width)) * ($available_paper_sizes->c->height / $height);
+                    $r2 = ($available_paper_sizes->c->width / $height) * floor((floor(($available_paper_sizes->c->height / 4)) / $width));
+                }
+
+                if ($howManyCut == 6) {
+                    $r1 = floor((floor(($available_paper_sizes->c->width / 3)) / $width)) * (floor($available_paper_sizes->c->height / 2) / $height);
+                    $r2 = (floor($available_paper_sizes->c->width / 2) / $height) * floor((floor(($available_paper_sizes->c->height / 3)) / $width));
+                }
+
+                if ($howManyCut == 8) {
+                    $r1 = floor((floor(($available_paper_sizes->c->width / 4)) / $width)) * (floor($available_paper_sizes->c->height / 2) / $height);
+                    $r2 = (floor($available_paper_sizes->c->width / 2) / $height) * floor((floor(($available_paper_sizes->c->height / 4)) / $width));
+                }
+
+                if ($howManyCut == 9) {
+                    $r1 = floor((floor(($available_paper_sizes->c->width / 3)) / $width)) * (floor($available_paper_sizes->c->height / 3) / $height);
+                    $r2 = (floor($available_paper_sizes->c->width / 3) / $height) * floor((floor(($available_paper_sizes->c->height / 3)) / $width));
+                }
                 array_push($tmp, $r1, $r2);
                 break;
             case 2:
+                if ($howManyCut == 0) {
+                    $r1 = floor($available_paper_sizes->b->width / $width) * floor($available_paper_sizes->b->height / $height);
+                    $r2 = floor($available_paper_sizes->b->width / $height) * floor($available_paper_sizes->b->height / $width);
+                }
+
                 if ($howManyCut == 2) {
                     $r1 = floor((floor(($available_paper_sizes->b->width / 2)) / $width)) * ($available_paper_sizes->b->height / $height);
                     $r2 = ($available_paper_sizes->b->width / $height) * floor((floor(($available_paper_sizes->b->height / 2)) / $width));
+                }
+
+                if ($howManyCut == '2H') {
+                    $r1 = floor((floor(($available_paper_sizes->b->height / 2)) / $height)) * ($available_paper_sizes->b->width / $width);
+                    $r2 = ($available_paper_sizes->b->height / $height) * floor((floor(($available_paper_sizes->b->width / 2)) / $width));
                 }
 
                 if ($howManyCut == 3) {
@@ -105,12 +181,42 @@ class UpController extends Controller
                     $r1 = floor((floor(($available_paper_sizes->b->width / 2)) / $width)) * floor(floor(($available_paper_sizes->b->height / 2)) / $height);
                     $r2 = floor((floor(($available_paper_sizes->b->width / 2)) / $height)) * floor(floor(($available_paper_sizes->b->height / 2)) / $width);
                 }
+
+                if ($howManyCut == '4V') {
+                    $r1 = floor((floor(($available_paper_sizes->c->width / 4)) / $width)) * ($available_paper_sizes->c->height / $height);
+                    $r2 = ($available_paper_sizes->c->width / $height) * floor((floor(($available_paper_sizes->c->height / 4)) / $width));
+                }
+
+                if ($howManyCut == 6) {
+                    $r1 = floor((floor(($available_paper_sizes->c->width / 3)) / $width)) * (floor($available_paper_sizes->c->height / 2) / $height);
+                    $r2 = (floor($available_paper_sizes->c->width / 2) / $height) * floor((floor(($available_paper_sizes->c->height / 3)) / $width));
+                }
+
+                if ($howManyCut == 8) {
+                    $r1 = floor((floor(($available_paper_sizes->c->width / 4)) / $width)) * (floor($available_paper_sizes->c->height / 2) / $height);
+                    $r2 = (floor($available_paper_sizes->c->width / 2) / $height) * floor((floor(($available_paper_sizes->c->height / 4)) / $width));
+                }
+
+                if ($howManyCut == 9) {
+                    $r1 = floor((floor(($available_paper_sizes->c->width / 3)) / $width)) * (floor($available_paper_sizes->c->height / 3) / $height);
+                    $r2 = (floor($available_paper_sizes->c->width / 3) / $height) * floor((floor(($available_paper_sizes->c->height / 3)) / $width));
+                }
                 array_push($tmp, $r1, $r2);
                 break;
             case 3:
+                if ($howManyCut == 0) {
+                    $r1 = floor($available_paper_sizes->c->width / $width) * floor($available_paper_sizes->c->height / $height);
+                    $r2 = floor($available_paper_sizes->c->width / $height) * floor($available_paper_sizes->c->height / $width);
+                }
+
                 if ($howManyCut == 2) {
                     $r1 = floor((floor(($available_paper_sizes->c->width / 2)) / $width)) * ($available_paper_sizes->c->height / $height);
                     $r2 = ($available_paper_sizes->c->width / $height) * floor((floor(($available_paper_sizes->c->height / 2)) / $width));
+                }
+
+                if ($howManyCut == '2H') {
+                    $r1 = floor((floor(($available_paper_sizes->c->height / 2)) / $height)) * ($available_paper_sizes->c->width / $width);
+                    $r2 = ($available_paper_sizes->c->height / $height) * floor((floor(($available_paper_sizes->c->width / 2)) / $width));
                 }
 
                 if ($howManyCut == 3) {
@@ -122,6 +228,26 @@ class UpController extends Controller
                     $r1 = floor((floor(($available_paper_sizes->c->width / 2)) / $width)) * floor(floor(($available_paper_sizes->c->height / 2)) / $height);
                     $r2 = floor((floor(($available_paper_sizes->c->width / 2)) / $height)) * floor(floor(($available_paper_sizes->c->height / 2)) / $width);
                 }
+
+                if ($howManyCut == '4V') {
+                    $r1 = floor((floor(($available_paper_sizes->c->width / 4)) / $width)) * ($available_paper_sizes->c->height / $height);
+                    $r2 = ($available_paper_sizes->c->width / $height) * floor((floor(($available_paper_sizes->c->height / 4)) / $width));
+                }
+
+                if ($howManyCut == 6) {
+                    $r1 = floor((floor(($available_paper_sizes->c->width / 3)) / $width)) * (floor($available_paper_sizes->c->height / 2) / $height);
+                    $r2 = (floor($available_paper_sizes->c->width / 2) / $height) * floor((floor(($available_paper_sizes->c->height / 3)) / $width));
+                }
+
+                if ($howManyCut == 8) {
+                    $r1 = floor((floor(($available_paper_sizes->c->width / 4)) / $width)) * (floor($available_paper_sizes->c->height / 2) / $height);
+                    $r2 = (floor($available_paper_sizes->c->width / 2) / $height) * floor((floor(($available_paper_sizes->c->height / 4)) / $width));
+                }
+
+                if ($howManyCut == 9) {
+                    $r1 = floor((floor(($available_paper_sizes->c->width / 3)) / $width)) * (floor($available_paper_sizes->c->height / 3) / $height);
+                    $r2 = (floor($available_paper_sizes->c->width / 3) / $height) * floor((floor(($available_paper_sizes->c->height / 3)) / $width));
+                }
                 array_push($tmp, $r1, $r2);
                 break;
         }
@@ -129,10 +255,64 @@ class UpController extends Controller
         return $tmp;
     }
 
+    private function doPaperSize($available_paper_sizes, $width, $height, $paper_size)
+    {
+        $this->zeroCut = $this->doCalc(0, $available_paper_sizes, $width, $height, $paper_size);
+        $this->twoCut = $this->doCalc(2, $available_paper_sizes, $width, $height, $paper_size);
+        $this->threeCut = $this->doCalc(3, $available_paper_sizes, $width, $height, $paper_size);
+        $this->fourCut = $this->doCalc(4, $available_paper_sizes, $width, $height, $paper_size);
+        $this->twoHCut = $this->doCalc('2H', $available_paper_sizes, $width, $height, $paper_size);
+        $this->fourVCut = $this->doCalc('4V', $available_paper_sizes, $width, $height, $paper_size);
+        $this->sixCut = $this->doCalc(6, $available_paper_sizes, $width, $height, $paper_size);
+        $this->eightCut = $this->doCalc(8, $available_paper_sizes, $width, $height, $paper_size);
+        $this->nineCut = $this->doCalc(9, $available_paper_sizes, $width, $height, $paper_size);
+    }
+
     public function draw()
     {
         // create a new empty image resource with red background
-        $img = Image::canvas(32, 32, '#ff0000');
+        $img = Image::canvas(350, 280, '#FFF');
+
+        $img->rectangle(0, 0, 350, 280, function ($draw) {
+            $draw->background('#FF0000');
+            // $draw->border(2, '#000');
+        });
+
+        $img->rectangle(5, 5, 345, 275, function ($draw) {
+            $draw->background('#FFF');
+            // $draw->border(2, '#000');
+        });
+
+        $img->line(345 / 2, 5, 345 / 2, 275, function ($draw) {
+            $draw->color('#0000ff');
+        });
+
+        $x = 345;
+        $y = 275;
+        $oneSideUps = 8;
+
+        // Need how many box or ups
+        for ($ups = 0; $ups < $oneSideUps; $ups++) {
+
+
+            // First box
+            if ($ups == 0) {
+            }
+        }
+
+        // $img->rectangle(10, 10, $k, $o, function ($draw) {
+        //     $draw->background('#DDD234');
+        //     $draw->border(1, '#000');
+        // });
+
+        // draw a blue pixel
+        // for ($x = 0; $x < 21; $x++){
+        //     $img->pixel('#0000ff', $x, $x);
+        // }
+
+        // draw a red pixel
+        // $img->pixel('#ff0000', 64, 64);
+
         return $img->response('png');
     }
 }
